@@ -52,6 +52,7 @@ sub _open {
         $self->{_page} = Net::LDAP::Control::Paged->new( size => $pagesize );
     }
 
+    # print STDERR "_open_operation _open\n";
     my $mesg = $self->_open_operation(%options);
     return undef unless $mesg;
 
@@ -78,6 +79,7 @@ sub _open_operation {
         control=> $self->{_page} ? [$self->{_page}] : []
     );
 
+    # print STDERR "do_operation\n";
     my $mesg = $self->{_db}->do_operation('search', @args);
 
     unless ($mesg) {
@@ -90,6 +92,7 @@ sub _open_operation {
         if ($self->{_page}) {
             # We had an abnormal exit, so let the server know we do not want any more
             $self->{_page}->size(0);
+            # print STDERR "do_operation on size 0\n";
             $self->do_operation('search', @args);
         }
 
@@ -132,6 +135,8 @@ sub _load_next {
     if (defined($cookie) and length($cookie)) {
         # second page, or later one (but not post-last) of a paged search:
         # load next page
+        # my $len = length($cookie);
+        # print STDERR "_open_operation next page, $len\n";
         $mesg = $self->_open_operation(%options);
     }
     else {
@@ -169,9 +174,16 @@ sub _load_next {
 
             if ($turn eq 'last') {
                 next unless length $key_value;
+                # if (defined($other_value)) {
+                #    print STDERR "key_value, other_value: $key_value $other_value\n";
+                # }
+                # else {
+                #    print STDERR "key_value, other_value: $key_value <undefined>\n";
+                # }
                 push @retrieved, [$key_value, $other_value];
             } else {
                 # Intermediate result can be empty string "".
+                # print STDERR "key_value: $key_value\n";
                 push @retrieved, [$key_value];
             }
 
