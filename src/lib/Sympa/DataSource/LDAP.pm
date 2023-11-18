@@ -93,7 +93,7 @@ sub _open_operation {
             # We had an abnormal exit, so let the server know we do not want any more
             $self->{_page}->size(0);
             # print STDERR "do_operation on size 0\n";
-            $self->do_operation('search', @args);
+            $self->{_db}->do_operation('search', @args);
         }
 
         return undef;
