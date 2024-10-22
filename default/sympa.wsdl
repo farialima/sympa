@@ -261,6 +261,15 @@
 	<part name="email" type="xsd:string"/>
 </message>
 
+<message name="moveUserRequest">
+	<part name="current_email" type="xsd:string"/>
+	<part name="email" type="xsd:string"/>
+</message>
+
+<message name="moveUserResponse">
+	<part name="return" type="xsd:boolean"/>
+</message>
+
 
 <!-- portType part -->
 
@@ -344,6 +353,10 @@
 	<operation name="checkCookie">
 		<input message="tns:checkCookieRequest" />
 		<output message="tns:checkCookieResponse" />
+	</operation>
+	<operation name="moveUser">
+		<input message="tns:moveUserRequest" />
+		<output message="tns:moveUserResponse" />
 	</operation>
 </portType>
 
@@ -601,6 +614,19 @@
 	</operation>
 	<operation name="checkCookie">
 		<soap:operation soapAction="urn:sympasoap#checkCookie"/>
+			<input>
+				<soap:body use="encoded" 
+					namespace="urn:sympasoap" 
+					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded"
+					namespace="urn:sympasoap" 
+					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+	</operation>
+	<operation name="moveUser">
+		<soap:operation soapAction="urn:sympasoap#moveUser"/>
 			<input>
 				<soap:body use="encoded" 
 					namespace="urn:sympasoap" 
